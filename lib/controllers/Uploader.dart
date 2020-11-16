@@ -55,7 +55,8 @@ class _UploaderState extends State<Uploader> {
                 if (_uploadTask.isComplete)
                   FlatButton(
                     onPressed: () {
-                      Get.dialog(Center(child: CircularProgressIndicator()));
+                      Get.dialog(Center(child: CircularProgressIndicator()),
+                          barrierDismissible: false);
                       _getNumbers().then((value) => Get.to(ResultIA()));
                     },
                     child: Text('Solve'),

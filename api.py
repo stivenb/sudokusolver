@@ -1,11 +1,4 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
-from numpy.core.defchararray import array
-try:
-  from PIL import Image
-except ImportError:
-  import Image
-from matplotlib import pyplot as plt
 import numpy as np
 import pytesseract
 import re
@@ -25,17 +18,16 @@ class NumpyArrayEncoder(JSONEncoder):
             return obj.tolist()
         return JSONEncoder.default(self, obj)
 
+
 @app.route('/array',methods=['POST'])
 def get():
     if request.method == 'POST':
         url = request.args.get(key='imagelink')
-        print(url)
         req = urlopen(url)
         arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
         img = cv2.imdecode(arr, -1) # 'Load it as it is'
 
         # Load image
-        #img = cv2.imread('sudoku3.png')  # Import image
         original = img.copy()  # Original Image copy
         # Image Processing
         gamma = 0.8
@@ -114,7 +106,6 @@ def get():
                             bcont = cont[c]
                             bindex = c
                     if bcont is None:
-                        print('Board not recognized')
                         sys.exit(1)
                     else:
                         secondbsize = 0
@@ -126,7 +117,6 @@ def get():
                                     secondbsize = area
                                     secondbcont = cont[c]
                         if secondbcont is None:
-                            print('Something went wrong.')
                             sys.exit(2)
                         mask = np.zeros((crop.shape),np.uint8)
                         cv2.drawContours(mask, [secondbcont], 0, (255,255,255), -1)
@@ -151,38 +141,55 @@ def get():
         else:
             sys.exit(1)
 
-        print(tabla)
        
         numpyData = {"array": tabla}
         encodedNumpyData = json.dumps(numpyData, cls=NumpyArrayEncoder)
         return encodedNumpyData
-
 @app.route('/solveAll',methods=['POST'])
 def solveAll():
     if request.method == 'POST':
         array = request.args.get(key='array')
-        array = array.replace('[','')
-        array = array.replace(']','')
-        sudoku = array.split(',')
-        sudokuint = [int(numeric_string) for numeric_string in sudoku]
-        table = np.zeros((9,9))
-        cont = 0
-        for i in range (9):
-            for j in range (9):
-                table[i,j] = sudokuint[cont]
-                cont = cont +1  
-        #print(xd)
-        print()
+        table = createSudoku(array)
         response = {"array":backtrack(table) }
         encodedNumpyData = json.dumps(response, cls=NumpyArrayEncoder)
         return encodedNumpyData
-
 @app.route('/hint',methods=['POST'])
 def giveHint():
     if request.method == 'POST':
-        array = request.args.get(key='array')   
-        return array
-
+      array = request.args.get(key='array')
+      table = createSudoku(array)
+      backtrackedTable = backtrack(table)
+      invInt = invertedIntersection(backtrackedTable, table)
+      for i in range(9):
+        for j in range(9):
+          if invInt[i,j] != 0:
+            table[i,j] = invInt[i,j]
+            break
+        break
+      response = {"array":table }
+      encodedNumpyData = json.dumps(response, cls=NumpyArrayEncoder)
+      return encodedNumpyData
+def invertedIntersection(A, B) :
+  tabla = np.zeros((9,9))
+  for i in range(9) : 
+    for j in range(9) : 
+      if (A[i,j] != B[i,j]) : 
+        tabla[i,j] = A[i,j]
+      else : 
+        tabla[i,j] = 0
+  return tabla
+def createSudoku(array):
+  array = array.replace('[','')
+  array = array.replace(']','')
+  sudoku = array.split(',')
+  sudokuint = [int(numeric_string) for numeric_string in sudoku]
+  table = np.zeros((9,9))
+  cont = 0
+  for i in range (9):
+    for j in range (9):
+      table[i,j] = sudokuint[cont]
+      cont = cont +1
+  return table  
 def check_sudoku(grid):
   bad_rows = [row for row in grid if not sudoku_ok(row)]
   grid = list(zip(*grid))
@@ -195,7 +202,6 @@ def check_sudoku(grid):
   bad_squares = [square for square in squares if not sudoku_ok(square)]
   return not (bad_rows or bad_cols or bad_squares)
 def sudoku_ok(line):
-  #return (len(line) == 9 and sum(line) == sum(set(line)))
   for x in range(len(line)):
     for y in range(x+1, len(line)):
       if line[x] == line[y] and not line[x] == 0:

@@ -11,6 +11,7 @@ class ResultIA extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool sw = true;
     return Scaffold(
         body: Container(
             height: double.infinity,
@@ -38,7 +39,7 @@ class ResultIA extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'IA',
+                      'SUDOKU',
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'OpenSans',
@@ -51,32 +52,80 @@ class ResultIA extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         RaisedButton(
-                            onPressed: () {
-                              print("paso a paso");
+                            onPressed: () async {
+                              if (sw == true) {
+                                Get.dialog(
+                                    Center(child: CircularProgressIndicator()),
+                                    barrierDismissible: false);
+                                await _giveHint();
+                                Get.back();
+                              } else {
+                                Get.snackbar('Table complete',
+                                    'The sudoku table is full ');
+                              }
                             },
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                               side: BorderSide(color: Color(0xFF527DAA)),
                             ),
-                            child: Text('Show a help')),
+                            child: Text('Show hint')),
                         RaisedButton(
                           onPressed: () async {
-                            print("Solucion completa");
-                            Get.dialog(
-                                Center(child: CircularProgressIndicator()));
-                            await _solveSudoku();
-                            Get.back();
+                            if (sw == true) {
+                              Get.dialog(
+                                  Center(child: CircularProgressIndicator()),
+                                  barrierDismissible: false);
+                              await _solveSudoku();
+                              sw = false;
+                              Get.back();
+                            } else {
+                              Get.snackbar('Table complete',
+                                  'The sudoku table is full ');
+                            }
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                             side: BorderSide(color: Color(0xFF527DAA)),
                           ),
-                          child: Text('Show all the solution'),
+                          child: Text('Show all the solutions'),
                         )
                       ],
                     )
                   ]),
             )));
+  }
+
+  Future<void> _giveHint() async {
+    var endpointUrl = 'http://192.168.1.4:4000/hint';
+    Map<String, String> data = {'array': tileController.mydata.toString()};
+    String queryString = Uri(queryParameters: data).query;
+    var requestUrl = endpointUrl + '?' + queryString;
+    var response = await http.post(requestUrl);
+    print(response.body);
+    var split = response.body.split(",");
+    for (var i = 0; i < split.length; i++) {
+      if (i == 0) {
+        split[i] = split[i].replaceAll(new RegExp(r"[^\s\w]"), "");
+      }
+      split[i] = split[i].replaceAll("[", "");
+      split[i] = split[i].replaceAll("]", "");
+      split[i] = split[i].replaceAll('array', "");
+      split[i] = split[i].replaceAll("{", "");
+      split[i] = split[i].replaceAll("}", "");
+    }
+    for (var i = 0; i < split.length; i++) {
+      if (double.parse(split[i]).toInt() >= 10) {
+        var x = double.parse(split[i]).toInt();
+        var z = x / 10;
+        tileController.change(i, z.toInt());
+      } else {
+        if (split[i] == '00') {
+          tileController.change(i, 0);
+        } else {
+          tileController.change(i, double.parse(split[i]).toInt());
+        }
+      }
+    }
   }
 
   Future<void> _solveSudoku() async {

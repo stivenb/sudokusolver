@@ -19,6 +19,7 @@ class Tile extends StatelessWidget {
       },
       keyboardType: TextInputType.number,
       style: TextStyle(),
+      textAlign: TextAlign.center,
     );
   }
 }
