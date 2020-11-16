@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "858917273065",
+    "firebase_url": "https://sudokuhelper-8201b.firebaseio.com",
+    "project_id": "sudokuhelper-8201b",
+    "storage_bucket": "sudokuhelper-8201b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858917273065:android:ca2537f3b71dd547e69f78",
+        "android_client_info": {
+          "package_name": "com.example.sudokusolver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "858917273065-s61ns44oblql1b8vg08stvvh02ecsu6i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sudokusolver",
+            "certificate_hash": "d43eac033cfb339043ffc031e7953c7fd9fde52d"
+          }
+        },
+        {
+          "client_id": "858917273065-sg9qgdvtjg46vgk5iuk5mlbesd06trne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpNa-x7oZEw_mdLYJbDtCoXt0quQGD0Xo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "858917273065-sg9qgdvtjg46vgk5iuk5mlbesd06trne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
