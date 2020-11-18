@@ -8,10 +8,11 @@ import 'package:http/http.dart' as http;
 class ResultIA extends StatelessWidget {
   ResultIA({Key key}) : super(key: key);
   final TileController tileController = Get.put(TileController());
+  bool sw = true;
+  bool sw1 = false;
 
   @override
   Widget build(BuildContext context) {
-    bool sw = true;
     return Scaffold(
         body: Container(
             height: double.infinity,
@@ -53,12 +54,17 @@ class ResultIA extends StatelessWidget {
                       children: <Widget>[
                         RaisedButton(
                             onPressed: () async {
+                              _isComplete();
                               if (sw == true) {
                                 Get.dialog(
                                     Center(child: CircularProgressIndicator()),
                                     barrierDismissible: false);
                                 await _giveHint();
                                 Get.back();
+                                if (sw1) {
+                                  Get.snackbar('Wrong Sudoku',
+                                      'The sudoku table is wrong');
+                                }
                               } else {
                                 Get.snackbar('Table complete',
                                     'The sudoku table is full ');
@@ -71,13 +77,17 @@ class ResultIA extends StatelessWidget {
                             child: Text('Show hint')),
                         RaisedButton(
                           onPressed: () async {
+                            _isComplete();
                             if (sw == true) {
                               Get.dialog(
                                   Center(child: CircularProgressIndicator()),
                                   barrierDismissible: false);
                               await _solveSudoku();
-                              sw = false;
                               Get.back();
+                              if (sw1) {
+                                Get.snackbar('Wrong Sudoku',
+                                    'The sudoku table is wrong');
+                              }
                             } else {
                               Get.snackbar('Table complete',
                                   'The sudoku table is full ');
@@ -101,30 +111,46 @@ class ResultIA extends StatelessWidget {
     String queryString = Uri(queryParameters: data).query;
     var requestUrl = endpointUrl + '?' + queryString;
     var response = await http.post(requestUrl);
-    print(response.body);
-    var split = response.body.split(",");
-    for (var i = 0; i < split.length; i++) {
-      if (i == 0) {
-        split[i] = split[i].replaceAll(new RegExp(r"[^\s\w]"), "");
+    if (response.statusCode == 500) {
+      sw1 = true;
+    } else {
+      sw1 = false;
+      var split = response.body.split(",");
+      for (var i = 0; i < split.length; i++) {
+        if (i == 0) {
+          split[i] = split[i].replaceAll(new RegExp(r"[^\s\w]"), "");
+        }
+        split[i] = split[i].replaceAll("[", "");
+        split[i] = split[i].replaceAll("]", "");
+        split[i] = split[i].replaceAll('array', "");
+        split[i] = split[i].replaceAll("{", "");
+        split[i] = split[i].replaceAll("}", "");
       }
-      split[i] = split[i].replaceAll("[", "");
-      split[i] = split[i].replaceAll("]", "");
-      split[i] = split[i].replaceAll('array', "");
-      split[i] = split[i].replaceAll("{", "");
-      split[i] = split[i].replaceAll("}", "");
-    }
-    for (var i = 0; i < split.length; i++) {
-      if (double.parse(split[i]).toInt() >= 10) {
-        var x = double.parse(split[i]).toInt();
-        var z = x / 10;
-        tileController.change(i, z.toInt());
-      } else {
-        if (split[i] == '00') {
-          tileController.change(i, 0);
+      for (var i = 0; i < split.length; i++) {
+        if (double.parse(split[i]).toInt() >= 10) {
+          var x = double.parse(split[i]).toInt();
+          var z = x / 10;
+          tileController.change(i, z.toInt());
         } else {
-          tileController.change(i, double.parse(split[i]).toInt());
+          if (split[i] == '00') {
+            tileController.change(i, 0);
+          } else {
+            tileController.change(i, double.parse(split[i]).toInt());
+          }
         }
       }
+    }
+  }
+
+  Widget _isComplete() {
+    var count = 0;
+    for (var i = 0; i < tileController.mydata.length; i++) {
+      count = count + tileController.mydata[i];
+    }
+    if (count == 405) {
+      sw = false;
+    } else {
+      sw = true;
     }
   }
 
@@ -134,27 +160,32 @@ class ResultIA extends StatelessWidget {
     String queryString = Uri(queryParameters: data).query;
     var requestUrl = endpointUrl + '?' + queryString;
     var response = await http.post(requestUrl);
-    var split = response.body.split(",");
-    for (var i = 0; i < split.length; i++) {
-      if (i == 0) {
-        split[i] = split[i].replaceAll(new RegExp(r"[^\s\w]"), "");
+    if (response.statusCode == 500) {
+      sw1 = true;
+    } else {
+      sw1 = false;
+      var split = response.body.split(",");
+      for (var i = 0; i < split.length; i++) {
+        if (i == 0) {
+          split[i] = split[i].replaceAll(new RegExp(r"[^\s\w]"), "");
+        }
+        split[i] = split[i].replaceAll("[", "");
+        split[i] = split[i].replaceAll("]", "");
+        split[i] = split[i].replaceAll('array', "");
+        split[i] = split[i].replaceAll("{", "");
+        split[i] = split[i].replaceAll("}", "");
       }
-      split[i] = split[i].replaceAll("[", "");
-      split[i] = split[i].replaceAll("]", "");
-      split[i] = split[i].replaceAll('array', "");
-      split[i] = split[i].replaceAll("{", "");
-      split[i] = split[i].replaceAll("}", "");
-    }
-    for (var i = 0; i < split.length; i++) {
-      if (double.parse(split[i]).toInt() >= 10) {
-        var x = double.parse(split[i]).toInt();
-        var z = x / 10;
-        tileController.change(i, z.toInt());
-      } else {
-        if (split[i] == '00') {
-          tileController.change(i, 0);
+      for (var i = 0; i < split.length; i++) {
+        if (double.parse(split[i]).toInt() >= 10) {
+          var x = double.parse(split[i]).toInt();
+          var z = x / 10;
+          tileController.change(i, z.toInt());
         } else {
-          tileController.change(i, double.parse(split[i]).toInt());
+          if (split[i] == '00') {
+            tileController.change(i, 0);
+          } else {
+            tileController.change(i, double.parse(split[i]).toInt());
+          }
         }
       }
     }

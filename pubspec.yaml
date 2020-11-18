@@ -37,6 +37,7 @@ dependencies:
   firebase_storage:
   image_cropper:
   image_picker:
+  matrix2d: ^0.0.7
 
 dev_dependencies:
   flutter_test:

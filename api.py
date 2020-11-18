@@ -150,7 +150,16 @@ def solveAll():
     if request.method == 'POST':
         array = request.args.get(key='array')
         table = createSudoku(array)
-        response = {"array":backtrack(table) }
+        table2 = np.zeros((9,9))
+        arrayBacktracked = backtrack(table)
+        invInt = invertedIntersection(arrayBacktracked, table)
+        for i in range(9):
+          for j in range(9):
+            if invInt[i,j] != 0:
+              table2[i,j] = invInt[i,j]
+            break
+          break
+        response = {"array": arrayBacktracked }
         encodedNumpyData = json.dumps(response, cls=NumpyArrayEncoder)
         return encodedNumpyData
 @app.route('/hint',methods=['POST'])

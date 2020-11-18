@@ -7,6 +7,8 @@ class Tile extends StatelessWidget {
   Tile({Key key, this.index}) : super(key: key);
   final TextEditingController textController = TextEditingController();
   final TileController controller = Get.find<TileController>();
+
+  bool sw = false;
   @override
   Widget build(BuildContext context) {
     return TextField(
