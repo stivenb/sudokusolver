@@ -78,7 +78,7 @@ class _UploaderState extends State<Uploader> {
   Future<void> _getNumbers() async {
     var imageURL = await (await _uploadTask.onComplete).ref.getDownloadURL();
     var url = imageURL.toString();
-    var endpointUrl = 'http://192.168.1.4:4000/array';
+    var endpointUrl = 'http://54.226.75.103:80/array';
     Map<String, String> data = {'imagelink': url};
     String queryString = Uri(queryParameters: data).query;
     var requestUrl = endpointUrl + '?' + queryString;
