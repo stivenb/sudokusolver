@@ -12,7 +12,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b9eec7a-f64f-4de0-b90b-767ed8697b32" name="Default Changelist" comment="" />
+    <list default="true" id="6b9eec7a-f64f-4de0-b90b-767ed8697b32" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/controllers/Uploader.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/controllers/Uploader.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/results.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/results.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +27,11 @@
   <component name="FavoritesManager">
     <favorites_list name="sudokusolver" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1inRNmowNqHd8dwtylQm6ecYFl1" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="false" />
@@ -54,5 +64,27 @@
       <updated>1602541331574</updated>
     </task>
     <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="640" y="256" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1606279722695">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="640" y="256" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606279722695" />
+    <state width="938" height="240" key="GridCell.Tab.0.bottom" timestamp="1606280966954">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="240" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606280966954" />
+    <state width="938" height="240" key="GridCell.Tab.0.center" timestamp="1606280966954">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="240" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606280966954" />
+    <state width="938" height="240" key="GridCell.Tab.0.left" timestamp="1606280966953">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="240" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606280966953" />
+    <state width="938" height="240" key="GridCell.Tab.0.right" timestamp="1606280966954">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="240" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606280966954" />
   </component>
 </project>

@@ -106,7 +106,7 @@ class ResultIA extends StatelessWidget {
   }
 
   Future<void> _giveHint() async {
-    var endpointUrl = 'http://54.226.75.103:80/hint';
+    var endpointUrl = 'http://192.168.1.4:4000/hint';
     Map<String, String> data = {'array': tileController.mydata.toString()};
     String queryString = Uri(queryParameters: data).query;
     var requestUrl = endpointUrl + '?' + queryString;
@@ -155,7 +155,7 @@ class ResultIA extends StatelessWidget {
   }
 
   Future<void> _solveSudoku() async {
-    var endpointUrl = 'http://54.226.75.103:80/solveAll';
+    var endpointUrl = 'http://192.168.1.4:4000/solveAll';
     Map<String, String> data = {'array': tileController.mydata.toString()};
     String queryString = Uri(queryParameters: data).query;
     var requestUrl = endpointUrl + '?' + queryString;
