@@ -78,34 +78,38 @@ class _UploaderState extends State<Uploader> {
   Future<void> _getNumbers() async {
     var imageURL = await (await _uploadTask.onComplete).ref.getDownloadURL();
     var url = imageURL.toString();
-    var endpointUrl = 'http://192.168.1.4:4000/array';
+    var endpointUrl = 'http://54.226.75.103:80/array';
     Map<String, String> data = {'imagelink': url};
     String queryString = Uri(queryParameters: data).query;
     var requestUrl = endpointUrl + '?' + queryString;
-    var response = await http.post(requestUrl);
-    var split = response.body.split(",");
-    for (var i = 0; i < split.length; i++) {
-      if (i == 0) {
-        split[i] = split[i].replaceAll(new RegExp(r"[^\s\w]"), "");
+    try {
+      var response = await http.post(requestUrl);
+      var split = response.body.split(",");
+      for (var i = 0; i < split.length; i++) {
+        if (i == 0) {
+          split[i] = split[i].replaceAll(new RegExp(r"[^\s\w]"), "");
+        }
+        split[i] = split[i].replaceAll("[", "");
+        split[i] = split[i].replaceAll("]", "");
+        split[i] = split[i].replaceAll('array', "");
+        split[i] = split[i].replaceAll("{", "");
+        split[i] = split[i].replaceAll("}", "");
       }
-      split[i] = split[i].replaceAll("[", "");
-      split[i] = split[i].replaceAll("]", "");
-      split[i] = split[i].replaceAll('array', "");
-      split[i] = split[i].replaceAll("{", "");
-      split[i] = split[i].replaceAll("}", "");
-    }
-    for (var i = 0; i < split.length; i++) {
-      if (double.parse(split[i]).toInt() >= 10) {
-        var x = double.parse(split[i]).toInt();
-        var z = x / 10;
-        tileController.mydata[i] = z.toInt();
-      } else {
-        if (split[i] == '00') {
-          tileController.mydata[i] = 0;
+      for (var i = 0; i < split.length; i++) {
+        if (double.parse(split[i]).toInt() >= 10) {
+          var x = double.parse(split[i]).toInt();
+          var z = x / 10;
+          tileController.mydata[i] = z.toInt();
         } else {
-          tileController.mydata[i] = double.parse(split[i]).toInt();
+          if (split[i] == '00') {
+            tileController.mydata[i] = 0;
+          } else {
+            tileController.mydata[i] = double.parse(split[i]).toInt();
+          }
         }
       }
+    } catch (e) {
+      Get.snackbar("Image wrong", "The sudoku table was not recognized");
     }
   }
 }
